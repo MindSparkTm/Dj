@@ -1,0 +1,66 @@
+{% extends 'library/base.html' %}
+{% block content %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <h1 class="h3 mb-2 text-gray-800">Authors</h1>
+        <!-- DataTables Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <a href="{% url 'library:author_create' %}">Add a new Author</a>
+
+            </div>
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Listing all Authors</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for author in object_list %}
+                            <tr>
+                                <td>
+                                    {{ author.id }}
+                                </td>
+                                <td>
+                                    {{ author.first_name }}
+                                </td>
+                                <td>
+                                    {{ author.last_name }}
+                                </td>
+                                <td>
+                                    {{ author.email }}
+                                </td>
+                                <td>
+                                    <a href="{% url 'library:author_detail' author.id %}">View</a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'library:author_update' author.id %}">Update</a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'library:author_delete' author.id %}">Delete</a>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                {% empty %}
+                                <td>No Author yet.</td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+{% endblock %}

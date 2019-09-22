@@ -1,0 +1,35 @@
+{% include 'base.html' %}
+<html lang="en">
+  <head>
+ {% block title %}
+     <title>HomePage</title>
+  {% endblock title %}
+  </head>
+  <body id="page-top">
+    <h1>
+    </h1>
+    <!-- Sidebar -->
+    <div id="wrapper">
+      <!-- sidebar -->
+  {% include 'library/sidebar.html' %}
+      <!-- End of sidebar -->
+
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+  {% include 'library/topbar.html' %}
+      <!-- End of Topbar -->
+    {% block content %}
+    {% endblock content %}
+    {% include 'library/footer.html' %}
+    {% include 'library/logout_modal.html' %}
+
+  </div>
+</div>
+
+</div>
+  </body>
+</html>

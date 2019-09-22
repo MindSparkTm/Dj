@@ -1,0 +1,10 @@
+{% extends 'library/base.html' %}
+{% block content %}
+<h2>Publisher Detail </h2>
+<div class="container-fluid">{{publisher.name}}</div>
+<div class="container-fluid">{{publisher.address}}</div>
+<div class="container-fluid">{{publisher.state}}</div>
+<div class="container-fluid">{{publisher.city}}</div>
+<div class="container-fluid">{{publisher.country}}</div>
+<a href="{% url 'library:publisher_update' publisher.id %}">Update</a>
+{% endblock %}

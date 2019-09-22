@@ -1,0 +1,65 @@
+{% extends 'library/base.html' %}
+{% block content %}
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          <h1 class="h3 mb-2 text-gray-800">Books</h1>
+                    <!-- DataTables Example -->
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Listing all Books</h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="table-responsive">
+                          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                              <tr>
+                                <th>Id</th>
+                                <th>Title</th>
+                                <th>Authors</th>
+                                <th>Publisher</th>
+                                <th>Publication Date</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for book in object_list%}
+                                <tr>
+                                  <td>
+                                {{book.id}}
+                              </td>
+                                <td>
+                                {{book.title}}
+                              </td>
+                              <td>
+                              {{book.authors}}
+                            </td>
+                             <td>
+                              {{book.publisher}}
+                            </td>
+                            <td>
+                             {{book.publication_date}}
+                           </td>
+                                    <td>
+                                <a href="{% url 'library:book_detail' book.id %}">View</a>
+                              </td>
+                              <td>
+                                <a href="{% url 'library:book_update' book.id %}">Update</a>
+                              </td>
+                              <td>
+                                <a href="{% url 'library:book_delete' book.id %}">Delete</a>
+                              </td>
+
+                            </tr>
+                            <tr>
+                              {% empty %}
+                                  <td>No Books yet.</td>
+                            </tr>
+                                {% endfor %}
+
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        <!-- /.container-fluid -->
+{% endblock %}

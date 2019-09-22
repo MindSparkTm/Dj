@@ -1,0 +1,57 @@
+{% extends 'library/base.html' %}
+{% block content %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <h1 class="h3 mb-2 text-gray-800">Categories</h1>
+        <!-- DataTables Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <a href="{% url 'library:category_create_view' %}">Add a new Category</a>
+
+            </div>
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Listing all Categories</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Category Name</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for category in object_list %}
+                            <tr>
+                                <td>
+                                    {{ category.id }}
+                                </td>
+                                <td>
+                                    {{ category.name }}
+                                </td>
+                                <td>
+                                    <a href="{% url 'library:category_detail_view' category.id %}">View</a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'library:category_update_view' category.id %}">Update</a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'library:category_delete_view' category.id %}">Delete</a>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                {% empty %}
+                                <td>No Category yet.</td>
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+{% endblock %}

@@ -1,0 +1,6 @@
+{% extends 'library/base.html' %}
+{% block content %}
+<h2>Category Detail </h2>
+<div class="container-fluid">{{category.name}}</div>
+<a href="{% url 'library:category_update_view' category.id %}">Update</a>
+{% endblock %}

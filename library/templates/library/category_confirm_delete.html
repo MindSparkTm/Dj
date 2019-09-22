@@ -1,0 +1,13 @@
+{% extends 'library/base.html' %}
+{% block content %}
+<h2>{{custom_heading}} </h2>
+<div class="form-group">
+<form method = "POST">
+{% csrf_token %}
+<div class="col-sm-10">
+Are you sure you want to delete <strong>{{ object }}</strong> ?
+<input type="submit" class="btn btn-primary" name="Delete"/>
+</div>
+</form>
+</div>
+{% endblock %}

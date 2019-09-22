@@ -1,0 +1,80 @@
+{% extends 'library/base.html' %}
+{% block content %}
+    <h2>Book Detail </h2>
+    <input type="hidden" id="book_id" value="{{ book.id }}"/>
+    <div class="container-fluid">Title:{{ book.title }}</div>
+    <div class="container-fluid">
+        <p> List of Authors
+        </p>
+        {% for author in book.authors.all %}
+            <ul>
+                <li>
+                    {{ author }}
+                </li>
+            </ul>
+        {% endfor %}
+    </div>
+    <div class="container-fluid">Publisher: {{ book.publisher }}</div>
+    <div class="container-fluid">Publication Date:{{ book.publication_date }}</div>
+    {% if book.book_cover_image|length > 0 %}
+        <div class="container-fluid">Cover Image: <img src="{{ book.book_cover_image.url }}" width="600px">
+        </div>
+    {% endif %} <br><br>
+    <a href="{% url 'library:book_update' book.id %}"> <span
+            class="badge badge-secondary">Update</span></a>
+    {% if read_by_user == False %}
+        <a href="#" onclick="mark_book_as_read()" class="card-link"> <span
+                class="badge badge-primary">Mark as Read</span></a>
+    {% endif %}
+    <hr>
+    <p><a class="btn btn-default" href="{% url 'library:review_create' pk=book.pk %}"><span class="badge badge-primary">Add Comment</span></a>
+    </p>
+
+
+    {% for review in book.reviews.all %}
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Reviews</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ review.user|title }}</h6>
+                <p class="card-text">{{ review.comment|linebreaks }}</p>
+                {% if review.user.username ==  request.user.username %}
+                    <a href="{% url 'library:review_update' review.id %}" class="card-link"><span
+                            class="badge badge-info">  Edit</span></a>
+                    <a href="{% url 'library:review_delete' review.id %}" class="card-link"> <span
+                            class="badge badge-danger">Delete</span></a>
+
+                {% endif %}
+                <div class="errorlist" id="review_marked_read_error">
+
+                </div>
+            </div>
+        </div>
+
+    {% empty %}
+        <p>No reviews here yet :(</p>
+    {% endfor %}
+    <script type="text/javascript">
+        function mark_book_as_read() {
+            $.ajax({
+                url: "library/book/mark/read/",
+                data: {
+                    'book_id': $('#book_id').val()
+                },
+                method: 'POST',
+                cache: false,
+                success: function (res) {
+                    $('#review_marked_read_error').empty();
+                    location.reload();
+                },
+                error: function (err) {
+                    $('#review_marked_read_error').empty();
+                    $('#review_marked_read_error').append('Something went wrong, Please try again Later');
+
+
+                }
+            });
+        }
+
+    </script>
+{% endblock %}
+
