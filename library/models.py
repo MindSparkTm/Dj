@@ -90,9 +90,6 @@ class Book(TimeStampedModel):
     def publisher_name(self):
         return self.publisher.name
 
-    @property
-    def authors_name(self):
-        return self.authors.first_name
 
 class Review(TimeStampedModel):
     comment = models.TextField(_('Enter your comment'))
