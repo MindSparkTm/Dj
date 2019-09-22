@@ -135,7 +135,6 @@ class BookDetail(DetailView):
         ctx = super(BookDetail,self).get_context_data(**kwargs)
         ctx['book_heading'] = 'Book Details'
         qs = Book.objects.filter(read_by=self.request.user,id=self.kwargs['pk'])
-        print('qs',qs)
         if qs:
             ctx['read_by_user'] = True
         else:
