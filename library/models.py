@@ -79,7 +79,6 @@ class Book(TimeStampedModel):
 
     @classmethod
     def get_book_by_id(self,pk):
-        print('o',pk)
         try:
             book = Book.objects.get(id=pk)
         except Exception as ex:
