@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'library.apps.LibraryConfig',
     'user.apps.AccountConfig',
     'rest_framework',
+    'channels',
 
 
 ]
@@ -79,7 +80,17 @@ TEMPLATES = [
     },
 ]
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 WSGI_APPLICATION = 'Dj.wsgi.application'
+ASGI_APPLICATION = 'Dj.routing.application'
+
 
 
 # Database
@@ -194,3 +205,9 @@ ACCOUNT_UNIQUE_EMAIL = True
 AUTH_USER_MODEL = 'user.CustomUser'
 LOGIN_REDIRECT_URL = '/library/book/'
 ACCOUNT_LOGOUT_REDIRECT_URL = '/accounts/login'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'

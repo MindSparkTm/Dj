@@ -27,11 +27,21 @@
                 class="badge badge-primary">Mark as Read</span></a>
     {% endif %}
     <hr>
-    <p><a class="btn btn-default" href="{% url 'library:review_create' pk=book.pk %}"><span class="badge badge-primary">Add Comment</span></a>
-    </p>
 
+
+    <textarea style="display:none;" id="chat-log" cols="100" rows="20"></textarea><br/>
+    <div class="form-group">
+        <input class="form-control" id="chat-message-input" type="text" size="100"/><br/>
+
+    </div>
+    <div class="form-group">
+        <input class="btn btn-primary" id="chat-message-submit" type="button" value="Send"/>
+
+    </div>
 
     {% for review in book.reviews.all %}
+            <div id="review">
+
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Reviews</h5>
@@ -49,11 +59,53 @@
                 </div>
             </div>
         </div>
+    </div>
 
     {% empty %}
         <p>No reviews here yet :(</p>
     {% endfor %}
     <script type="text/javascript">
+
+     var bookid = "{{ book.id }}"
+    var user = "{{ request.user.username }}"
+    console.log('roomName',bookid,user)
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/library/' + bookid + '/');
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        console.log('message received',message)
+          $("#review").append(
+              '<div class="card"><div class="card-body"><h5 class="card-title">Reviews</h5>'+message+' </div></div>');
+
+        document.querySelector('#chat-log').value += (message + '\n');
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+
+        messageInputDom.value = '';
+    };
+
+
+
         function mark_book_as_read() {
             $.ajax({
                 url: "library/book/mark/read/",
