@@ -25,14 +25,14 @@ url(r'publisher/(?P<pk>\w+)/edit/$', PublisherUpdate.as_view(), name='publisher_
 url(r'publisher/(?P<pk>\w+)/delete',PublisherDelete.as_view(), name='publisher_delete'),
 
 # Book urlpatterns
-url(r'book/$', BookList.as_view(), name='book_list'),
-url(r'book/add/$', BookCreate.as_view(), name='book_create'),
-url(r'book/(?P<pk>\w+)/$', BookDetail.as_view(), name='book_detail'),
-url(r'book/(?P<pk>\w+)/edit/$', BookUpdate.as_view(), name='book_update'),
-url(r'book/(?P<pk>\w+)/delete',BookDelete.as_view(), name='book_delete'),
-url(r'book/collection/read$', ReadBookList.as_view(), name='read_book_list'),
-url(r'book/mark/read/$', book_mark_read, name='mark_read'),
-
+url(r'^book/$', BookList.as_view(), name='book_list'),
+url(r'^book/add/$', BookCreate.as_view(), name='book_create'),
+url(r'^book/(?P<pk>\w+)/$', BookDetail.as_view(), name='book_detail'),
+url(r'^book/(?P<pk>\w+)/edit/$', BookUpdate.as_view(), name='book_update'),
+url(r'^book/(?P<pk>\w+)/delete/$',BookDelete.as_view(), name='book_delete'),
+url(r'^book/collection/read/$', ReadBookList.as_view(), name='read_book_list'),
+url(r'^book/mark/read/$', book_mark_read, name='mark_read'),
+url(r'^book/search/results/$',BookSearch.as_view(), name='book_search'),
 #Book REST API urls
 url(r'book/api/v1/$', BookListApi.as_view(), name='api_book_list'),
 url(r'book/api/v1/(?P<pk>\w+)/$', BookDetailApi.as_view(), name='api_book_detail'),

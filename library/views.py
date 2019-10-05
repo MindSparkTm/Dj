@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView,DetailView,DeleteView,UpdateView
 from django.views.generic.list import ListView
 from .models import *
+from django.db.models import Q # new
 from django.shortcuts import redirect,get_object_or_404
 from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -161,6 +162,17 @@ class BookDelete(DeleteView):
         ctx['book_heading'] = 'Delete Book'
         return ctx
 
+class BookSearch(ListView):
+    model = Book
+    template_name = 'library/book_list.html'
+
+    def get_queryset(self):
+        query = self.request.GET['q']
+        if query is not None:
+            book_list = Book.objects.filter(Q(title__icontains=query)
+                                       | Q(authors__first_name__icontains=query)
+                                       | Q(authors__last_name__icontains=query))
+            return book_list
 class ReviewCreate(CreateView):
     model = Review
     fields = ('comment',)
@@ -207,11 +219,12 @@ class ReadBookList(ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super(ReadBookList,self).get_context_data(**kwargs)
-        ctx['book_list'] = 'Books you Read'
+        ctx['title_heading'] = 'Books you Read'
         return ctx
 
     def get_queryset(self):
-        return Book.objects.filter(read_by=self.request.user)
+        book_list = Book.objects.filter(read_by=self.request.user)
+        return book_list
 
 #DRF section
 
