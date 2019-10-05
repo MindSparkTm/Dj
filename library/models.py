@@ -38,6 +38,9 @@ class Author(TimeStampedModel):
         verbose_name = ('Author')
         verbose_name_plural = ('Authors')
 
+    def __str__(self):
+        return u'{}{}'.format(self.first_name,self.last_name)
+
     def __unicode__(self):
         return u'{}{}'.format(self.first_name,self.last_name)
 
