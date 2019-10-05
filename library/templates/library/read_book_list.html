@@ -6,7 +6,7 @@
                     <!-- DataTables Example -->
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Listing all Books</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">{{ title_heading }}</h6>
                       </div>
                       <div class="card-body">
                         <div class="table-responsive">
@@ -24,7 +24,7 @@
                                 {% for book in object_list%}
                                 <tr>
                                   <td>
-                                {{book.id}}
+                                {{book.pk}}
                               </td>
                                 <td>
                                 {{book.title}}
@@ -38,14 +38,14 @@
                             <td>
                              {{book.publication_date}}
                            </td>
-                                    <td>
-                                <a href="{% url 'library:book_detail' book.id %}">View</a>
+                           <td>
+                                <a href="{% url 'library:book_detail' book.pk %}">View</a>
                               </td>
                               <td>
-                                <a href="{% url 'library:book_update' book.id %}">Update</a>
+                                <a href="{% url 'library:book_update' book.pk %}">Update</a>
                               </td>
                               <td>
-                                <a href="{% url 'library:book_delete' book.id %}">Delete</a>
+                                <a href="{% url 'library:book_delete' book.pk %}">Delete</a>
                               </td>
 
                             </tr>
