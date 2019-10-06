@@ -24,7 +24,7 @@ class Category(TimeStampedModel):
         verbose_name = ('Category')
         verbose_name_plural = ('Categories')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -34,16 +34,13 @@ class Category(TimeStampedModel):
 class Author(TimeStampedModel):
     first_name = models.CharField(_('First Name'), max_length=50)
     last_name = models.CharField(_('Last Name'), max_length=50)
-    email = models.EmailField()
+    email = models.EmailField(null=True,blank=True)
 
     class Meta:
         verbose_name = ('Author')
         verbose_name_plural = ('Authors')
 
     def __str__(self):
-        return u'{}{}'.format(self.first_name, self.last_name)
-
-    def __unicode__(self):
         return u'{}{}'.format(self.first_name, self.last_name)
 
     def get_absolute_url(self):
@@ -57,7 +54,7 @@ class Publisher(TimeStampedModel):
     city = models.CharField(_('City'), max_length=50)
     country = models.CharField(_('Country'), max_length=60)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -114,3 +111,4 @@ class FileUpload(TimeStampedModel):
 
     def __unicode__(self):
         return u'{}'.format(self.file_name)
+
