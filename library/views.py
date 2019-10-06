@@ -11,7 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from .serializers import BookSerializer
 # Create your views here.
-from .tasks import adding_task
 
 class CategoryListView(ListView):
     model = Category
@@ -121,7 +120,7 @@ class BookList(ListView):
 
 class BookCreate(CreateView):
     model = Book
-    fields = ('title','authors','categories','publication_date','book_cover_image','publisher',)
+    fields = ('title','authors','category','publication_date','book_cover_image','publisher',)
 
     def get_context_data(self,**kwargs):
         ctx = super(BookCreate,self).get_context_data(**kwargs)
@@ -133,7 +132,6 @@ class BookDetail(DetailView):
     template_name = 'library/book_detail.html'
 
     def get_context_data(self,**kwargs):
-        adding_task.delay(10,20)
         ctx = super(BookDetail,self).get_context_data(**kwargs)
         ctx['book_heading'] = 'Book Details'
         qs = Book.objects.filter(read_by=self.request.user,id=self.kwargs['pk'])
@@ -146,7 +144,7 @@ class BookDetail(DetailView):
 
 class BookUpdate(UpdateView):
     model  = Book
-    fields = ('title','authors','categories','publication_date','book_cover_image','publisher',)
+    fields = ('title','authors','category','publication_date','book_cover_image','publisher',)
 
     def get_context_data(self,**kwargs):
         ctx = super(BookUpdate,self).get_context_data(**kwargs)
