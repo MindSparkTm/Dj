@@ -49,10 +49,10 @@ class Author(TimeStampedModel):
 
 class Publisher(TimeStampedModel):
     name = models.CharField(_('Publisher Name'), max_length=50)
-    address = models.CharField(_('Address'), max_length=100)
-    state = models.CharField(_('State'), max_length=50)
-    city = models.CharField(_('City'), max_length=50)
-    country = models.CharField(_('Country'), max_length=60)
+    address = models.CharField(_('Address'), max_length=100,null=True,blank=True)
+    state = models.CharField(_('State'), max_length=50,null=True,blank=True)
+    city = models.CharField(_('City'), max_length=50,null=True,blank=True)
+    country = models.CharField(_('Country'), max_length=60,null=True,blank=True)
 
     def __str__(self):
         return self.name
