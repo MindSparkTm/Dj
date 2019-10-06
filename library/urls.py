@@ -33,6 +33,8 @@ url(r'^book/(?P<pk>\w+)/delete/$',BookDelete.as_view(), name='book_delete'),
 url(r'^book/collection/read/$', ReadBookList.as_view(), name='read_book_list'),
 url(r'^book/mark/read/$', book_mark_read, name='mark_read'),
 url(r'^book/search/results/$',BookSearch.as_view(), name='book_search'),
+url(r'^file/upload/$',FileUpload.as_view(),name='file_upload'),
+
 #Book REST API urls
 url(r'book/api/v1/$', BookListApi.as_view(), name='api_book_list'),
 url(r'book/api/v1/(?P<pk>\w+)/$', BookDetailApi.as_view(), name='api_book_detail'),

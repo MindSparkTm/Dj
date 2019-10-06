@@ -226,9 +226,12 @@ class ReadBookList(ListView):
         book_list = Book.objects.filter(read_by=self.request.user)
         return book_list
 
+class FileUpload(CreateView):
+    model = FileUpload
+    fields = '__all__'
+    success_url = reverse_lazy('library:book_list')
+
 #DRF section
-
-
 class BookListApi(generics.ListCreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer

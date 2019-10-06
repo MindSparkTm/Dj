@@ -1,4 +1,5 @@
-from .models import Book,Category,Author,Publisher,Review
+from .models import Book,Category,Author,Publisher,Review,FileUpload
+from django import forms
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -19,3 +20,9 @@ class BookForm(forms.ModelForm):
     class Meta:
         fields = ('__all__')
         model = Book
+
+class FileUploadForm(forms.ModelForm):
+    class Meta:
+        fields = ('__all__')
+        model = FileUpload
+
