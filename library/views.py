@@ -10,12 +10,15 @@ from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import generics
 from .serializers import BookSerializer
+from .tasks import add_task
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 # Create your views here.
 
-class CategoryListView(ListView):
+class CategoryListView(LoginRequiredMixin,ListView):
     model = Category
 
-class CategoryCreateView(CreateView):
+class CategoryCreateView(LoginRequiredMixin,CreateView):
     model = Category
     fields = '__all__'
 
@@ -24,11 +27,11 @@ class CategoryCreateView(CreateView):
         ctx['custom_heading'] = 'Create a Category'
         return ctx
 
-class CategoryDetailView(DetailView):
+class CategoryDetailView(LoginRequiredMixin,DetailView):
     model = Category
     template_name = 'library/category_detail.html'
 
-class CategoryUpdateView(UpdateView):
+class CategoryUpdateView(LoginRequiredMixin,UpdateView):
     model = Category
     fields =['name']
 
@@ -37,7 +40,7 @@ class CategoryUpdateView(UpdateView):
         ctx['custom_heading'] = 'Update Category'
         return ctx
 
-class CategoryDeleteView(DeleteView):
+class CategoryDeleteView(LoginRequiredMixin,DeleteView):
     model = Category
     success_url = reverse_lazy('library:category_list_view')
     def get_context_data(self,**kwargs):
@@ -45,7 +48,7 @@ class CategoryDeleteView(DeleteView):
         ctx['custom_heading'] = 'Delete Category'
         return ctx
 
-class AuthorCreate(CreateView):
+class AuthorCreate(LoginRequiredMixin,CreateView):
     model = Author
     fields = '__all__'
 
@@ -54,10 +57,10 @@ class AuthorCreate(CreateView):
         ctx['author_heading'] = 'Create a New Author'
         return ctx
 
-class AuthorList(ListView):
+class AuthorList(LoginRequiredMixin,ListView):
     model = Author
 
-class AuthorDetail(DetailView):
+class AuthorDetail(LoginRequiredMixin,DetailView):
     model  = Author
     template_name = 'library/author_detail.html'
 
@@ -69,7 +72,7 @@ class AuthorUpdate(UpdateView):
         ctx = super(AuthorUpdate,self).get_context_data(**kwargs)
         ctx['author_heading'] = 'Update Author'
         return ctx
-class AuthorDelete(DeleteView):
+class AuthorDelete(LoginRequiredMixin,DeleteView):
     model = Author
     success_url = reverse_lazy('library:author_list')
 
@@ -78,7 +81,7 @@ class AuthorDelete(DeleteView):
         ctx['author_heading'] = 'Delete Author'
         return ctx
 
-class PublisherCreate(CreateView):
+class PublisherCreate(LoginRequiredMixin,CreateView):
     model = Publisher
     fields = '__all__'
 
@@ -87,14 +90,14 @@ class PublisherCreate(CreateView):
         ctx['publisher_heading'] = 'Create a New Publisher'
         return ctx
 
-class PublisherList(ListView):
+class PublisherList(LoginRequiredMixin,ListView):
     model = Publisher
 
-class PublisherDetail(DetailView):
+class PublisherDetail(LoginRequiredMixin,DetailView):
     model  = Publisher
     template_name = 'library/publisher_detail.html'
 
-class PublisherUpdate(UpdateView):
+class PublisherUpdate(LoginRequiredMixin,UpdateView):
     model  = Publisher
     fields = '__all__'
 
@@ -106,7 +109,7 @@ class PublisherUpdate(UpdateView):
         ctx['publisher_heading'] = 'Update Publisher'
         return ctx
 
-class PublisherDelete(DeleteView):
+class PublisherDelete(LoginRequiredMixin,DeleteView):
     model = Publisher
     success_url = reverse_lazy('library:publisher_list')
 
@@ -115,10 +118,10 @@ class PublisherDelete(DeleteView):
         ctx['publisher_heading'] = 'Delete Publisher'
         return ctx
 
-class BookList(ListView):
+class BookList(LoginRequiredMixin,ListView):
     model = Book
 
-class BookCreate(CreateView):
+class BookCreate(LoginRequiredMixin,CreateView):
     model = Book
     fields = ('title','authors','category','publication_date','book_cover_image','publisher',)
 
@@ -127,12 +130,13 @@ class BookCreate(CreateView):
         ctx['book_heading'] = 'Add a new Book'
         return ctx
 
-class BookDetail(DetailView):
+class BookDetail(LoginRequiredMixin,DetailView):
     model = Book
     template_name = 'library/book_detail.html'
 
     def get_context_data(self,**kwargs):
         ctx = super(BookDetail,self).get_context_data(**kwargs)
+        add_task.delay(50)
         ctx['book_heading'] = 'Book Details'
         qs = Book.objects.filter(read_by=self.request.user,id=self.kwargs['pk'])
         ctx['username'] = self.request.user.username
@@ -142,7 +146,7 @@ class BookDetail(DetailView):
             ctx['read_by_user'] = False
         return ctx
 
-class BookUpdate(UpdateView):
+class BookUpdate(LoginRequiredMixin,UpdateView):
     model  = Book
     fields = ('title','authors','category','publication_date','book_cover_image','publisher',)
 
@@ -151,7 +155,7 @@ class BookUpdate(UpdateView):
         ctx['book_heading'] = 'Update Book'
         return ctx
 
-class BookDelete(DeleteView):
+class BookDelete(LoginRequiredMixin,DeleteView):
     model = Book
     success_url = reverse_lazy('library:book_list')
 
@@ -160,7 +164,7 @@ class BookDelete(DeleteView):
         ctx['book_heading'] = 'Delete Book'
         return ctx
 
-class BookSearch(ListView):
+class BookSearch(LoginRequiredMixin,ListView):
     model = Book
     template_name = 'library/book_list.html'
 
@@ -171,7 +175,7 @@ class BookSearch(ListView):
                                        | Q(authors__first_name__icontains=query)
                                        | Q(authors__last_name__icontains=query))
             return book_list
-class ReviewCreate(CreateView):
+class ReviewCreate(LoginRequiredMixin,CreateView):
     model = Review
     fields = ('comment',)
 
@@ -188,7 +192,7 @@ class ReviewCreate(CreateView):
         return redirect(reverse_lazy('library:book_detail',kwargs={'pk':self.kwargs['pk']}))
 
 
-class ReviewUpdate(UpdateView):
+class ReviewUpdate(LoginRequiredMixin,UpdateView):
     model = Review
     fields = ('comment',)
 
@@ -200,7 +204,7 @@ class ReviewUpdate(UpdateView):
         ctx['comment_heading'] = 'Update your Comment'
         return ctx
 
-class ReviewDelete(DeleteView):
+class ReviewDelete(LoginRequiredMixin,DeleteView):
     model = Review
 
     def get_success_url(self,**kwargs):
@@ -211,7 +215,7 @@ class ReviewDelete(DeleteView):
         ctx['comment_heading'] = 'Delete your Comment'
         return ctx
 
-class ReadBookList(ListView):
+class ReadBookList(LoginRequiredMixin,ListView):
     model = Book
     template_name = 'library/read_book_list.html'
 
@@ -224,7 +228,7 @@ class ReadBookList(ListView):
         book_list = Book.objects.filter(read_by=self.request.user)
         return book_list
 
-class FileUpload(CreateView):
+class FileUpload(LoginRequiredMixin,CreateView):
     model = FileUpload
     fields = '__all__'
     success_url = reverse_lazy('library:book_list')
