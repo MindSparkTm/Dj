@@ -152,6 +152,9 @@ class BookDetail(LoginRequiredMixin,DetailView):
             ctx['read_by_user'] = False
         return ctx
 
+    def get_queryset(self):
+        return Book.objects.prefetch_related('reviews__user').filter(id=self.kwargs['pk'])
+
 class BookUpdate(LoginRequiredMixin,UpdateView):
     model  = Book
     fields = ('title','authors','category','publication_date','book_cover_image','publisher',)
