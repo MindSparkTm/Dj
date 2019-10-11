@@ -121,6 +121,12 @@ class PublisherDelete(LoginRequiredMixin,DeleteView):
 class BookList(LoginRequiredMixin,ListView):
     model = Book
 
+    def get_queryset(self):
+        return Book.objects.prefetch_related(
+            'authors'
+        )
+
+
 class BookCreate(LoginRequiredMixin,CreateView):
     model = Book
     fields = ('title','authors','category','publication_date','book_cover_image','publisher',)
@@ -145,6 +151,8 @@ class BookDetail(LoginRequiredMixin,DetailView):
         else:
             ctx['read_by_user'] = False
         return ctx
+
+
 
 class BookUpdate(LoginRequiredMixin,UpdateView):
     model  = Book
