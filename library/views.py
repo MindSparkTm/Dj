@@ -124,7 +124,7 @@ class BookList(LoginRequiredMixin,ListView):
     def get_queryset(self):
         return Book.objects.prefetch_related(
             'authors'
-        )
+        ).select_related('publisher')
 
 
 class BookCreate(LoginRequiredMixin,CreateView):
@@ -151,8 +151,6 @@ class BookDetail(LoginRequiredMixin,DetailView):
         else:
             ctx['read_by_user'] = False
         return ctx
-
-
 
 class BookUpdate(LoginRequiredMixin,UpdateView):
     model  = Book
