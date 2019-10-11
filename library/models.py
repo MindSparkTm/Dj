@@ -70,7 +70,7 @@ class Book(TimeStampedModel):
     book_cover_image = models.ImageField(upload_to='images/', blank=True, null=True)
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
     publication_date = models.DateField()
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category,on_delete=models.PROTECT)
     read_by = models.ManyToManyField(CustomUser, related_name='books')
 
     def __unicode__(self):
