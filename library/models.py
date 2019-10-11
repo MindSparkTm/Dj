@@ -95,7 +95,7 @@ class Book(TimeStampedModel):
 
 class Review(TimeStampedModel):
     comment = models.TextField(_('Enter your comment'))
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,related_name='user')
     book = models.ForeignKey(Book, on_delete=models.CASCADE, related_name='reviews')
 
     def __unicode__(self):
