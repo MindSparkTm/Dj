@@ -14,6 +14,9 @@ from .tasks import add_task
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
+import logging
+logger = logging.getLogger(__name__)
+
 
 class CategoryListView(LoginRequiredMixin,ListView):
     model = Category
@@ -149,6 +152,7 @@ class BookDetail(LoginRequiredMixin,DetailView):
         if qs:
             ctx['read_by_user'] = True
         else:
+            logger.debug("Book has not been read", exc_info=True)
             ctx['read_by_user'] = False
         return ctx
 
