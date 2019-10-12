@@ -170,28 +170,31 @@ EMAIL_HOST_PASSWORD = os.environ.get('GOOGLE_API_KEY')
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
+    'disable_existing_loggers': True,
     'formatters': {
-        'simple': {
-            'format': '%(levelname)s %(message)s'
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
     },
     'handlers': {
         'console': {
-            'level': 'DEBUG',
+            'level': 'NOTSET',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
-        },
+            'formatter': 'verbose'
+        }
     },
     'loggers': {
-        'portfolio': {
+        '': {
             'handlers': ['console'],
-            'level': 'DEBUG',
-            'propagate': True,
+            'level': 'NOTSET',
         },
+        'django.request': {
+            'handlers': ['console'],
+            'propagate': False,
+            'level': 'ERROR'
+        }
     }
 }
-
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     "django.contrib.auth.backends.ModelBackend",
