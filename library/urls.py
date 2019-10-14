@@ -44,5 +44,7 @@ url(r'review/add/(?P<pk>\w+)/$', ReviewCreate.as_view(), name='review_create'),
 url(r'review/(?P<pk>\w+)/edit/$', ReviewUpdate.as_view(), name='review_update'),
 url(r'review/(?P<pk>\w+)/delete/$', ReviewDelete.as_view(), name='review_delete'),
 
+url(r'trial/$', test_page, name='test_page'),
+url(r'^ajax_calls/search/', autocompleteModel),
 
 ]

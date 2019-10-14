@@ -5,16 +5,17 @@ from django.views.generic import CreateView,DetailView,DeleteView,UpdateView
 from django.views.generic.list import ListView
 from .models import *
 from django.db.models import Q # new
-from django.shortcuts import redirect,get_object_or_404
+from django.shortcuts import redirect,get_object_or_404,render
 from django.http.response import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from rest_framework import generics
 from .serializers import BookSerializer
 from .tasks import add_task
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 # Create your views here.
 import logging
+import json
 logger = logging.getLogger(__name__)
 
 
@@ -152,7 +153,7 @@ class BookDetail(LoginRequiredMixin,DetailView):
         if qs:
             ctx['read_by_user'] = True
         else:
-            logger.debug("Book has not been read", exc_info=True)
+            logger.error("Book has not been read", exc_info=True)
             ctx['read_by_user'] = False
         return ctx
 
@@ -188,6 +189,7 @@ class BookSearch(LoginRequiredMixin,ListView):
                                        | Q(authors__first_name__icontains=query)
                                        | Q(authors__last_name__icontains=query))
             return book_list
+
 class ReviewCreate(LoginRequiredMixin,CreateView):
     model = Review
     fields = ('comment',)
@@ -270,3 +272,26 @@ def book_mark_read(request):
             return HttpResponse('failure')
     else:
         return HttpResponse('Error')
+@login_required
+def test_page(request):
+    if request.method == 'GET':
+        return render(request,'library/test.html')
+@csrf_exempt
+def autocompleteModel(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        print('Request',q)
+
+        book_list = Book.objects.filter(
+            Q(title__icontains=q) |
+                               Q(authors__first_name__icontains=q) |
+                               Q(authors__last_name__icontains=q))
+        results = []
+        for book in book_list:
+            results.append(book.title)
+        data = json.dumps(results)
+
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

@@ -8,7 +8,7 @@
   <!-- Topbar Search -->
   <form action="{% url 'library:book_search' %}" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
     <div class="input-group">
-      <input type="text" name="q" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+      <input type="text" id="txtSearch" name="q" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
       <div class="input-group-append">
           <input type="submit" class="btn btn-primary" value="Search"/>
 
@@ -48,3 +48,20 @@
   </ul>
 
 </nav>
+<script>
+        $(document).ready(function(){
+            $("#txtSearch").autocomplete({
+                source: "/library/ajax_calls/search/",
+                minLength: 2,
+                open: function(){
+                    setTimeout(function () {
+                        $('.ui-autocomplete').css('z-index', 99);
+                    }, 0);
+                },
+               {% comment %}  select: function( event, ui ) {
+                    console.log('key',ui.item.key,ui.item.value)
+            window.location.href = ui.item.value;
+        }{% endcomment %}
+              });
+        });
+</script>
