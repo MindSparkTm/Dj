@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
-from .models import Category, Author, Publisher, Book, Review, FileUpload
+from .models import Category, Author, Publisher, Book, Review, FileUpload,chatmessage
 
 
 # Register your models here.
@@ -37,10 +37,16 @@ class BookAdmin(admin.ModelAdmin):
     readonly_fields = ('created', 'last_modified')
     search_fields = ('name', 'get_publisher')
 
-
+class ChatMessageAdmin(admin.ModelAdmin):
+    def get_user(self, obj):
+        return obj.user_id.username
+    list_display = ('message_text', 'get_user','group_name')
+    readonly_fields = ('created', 'last_modified')
+    search_fields = ('get_user','group_name',)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Publisher, PublisherAdmin)
 admin.site.register(Book, BookAdmin)
 admin.site.register(Review)
 admin.site.register(FileUpload)
+admin.site.register(chatmessage,ChatMessageAdmin)
