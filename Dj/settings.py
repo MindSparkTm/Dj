@@ -65,6 +65,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'user.middleware.OneSessionPerUserMiddleware'
 
 ]
 
@@ -82,6 +83,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'library.pages_context.show_active_users',
+
             ],
         },
     },
@@ -162,11 +165,16 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media/upload/')
 MEDIA_URL = os.path.join(BASE_DIR, 'static/media/upload/')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST_USER = "**"
+EMAIL_HOST_USER = "smartsurajit2008@gmail.com"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_PASSWORD = os.environ.get('GOOGLE_API_KEY')
+
+ADMINS = (
+  ('Surajit', 'smartsurajit2008@gmail.com'),
+)
+
 
 LOGGING = {
     'version': 1,
@@ -181,6 +189,10 @@ LOGGING = {
             'level': 'NOTSET',
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
         }
     },
     'loggers': {
@@ -189,8 +201,8 @@ LOGGING = {
             'level': 'NOTSET',
         },
         'django.request': {
-            'handlers': ['console'],
-            'propagate': False,
+            'handlers': ['mail_admins'],
+            'propagate': True,
             'level': 'ERROR'
         }
     }
