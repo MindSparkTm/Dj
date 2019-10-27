@@ -31,6 +31,7 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         ctx = super(CategoryCreateView, self).get_context_data(**kwargs)
         ctx['custom_heading'] = 'Create a Category'
+        ctx['category'] = 'active'
         return ctx
 
 
@@ -142,11 +143,17 @@ class PublisherDelete(LoginRequiredMixin, DeleteView):
 
 class BookList(LoginRequiredMixin, ListView):
     model = Book
+    paginate_by = 20
 
     def get_queryset(self):
         return Book.objects.prefetch_related(
             'authors'
         ).select_related('publisher')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(BookList,self).get_context_data(**kwargs)
+        ctx['book_list'] = 'active'
+        return ctx
 
 
 class BookCreate(LoginRequiredMixin, CreateView):
@@ -262,6 +269,7 @@ class ReadBookList(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super(ReadBookList, self).get_context_data(**kwargs)
         ctx['title_heading'] = 'Books you Read'
+        ctx['read_book'] = 'active'
         return ctx
 
     def get_queryset(self):
@@ -273,6 +281,11 @@ class FileUpload(LoginRequiredMixin, CreateView):
     model = FileUpload
     fields = '__all__'
     success_url = reverse_lazy('library:book_list')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(FileUpload,self).get_context_data(**kwargs)
+        ctx['book_upload'] = 'active'
+        return ctx
 
 
 # DRF section
@@ -308,6 +321,10 @@ def test_page(request):
         return render(request, 'library/test.html')
 
 
+@login_required
+def chat_room(request):
+    if request.method == 'GET':
+        return render(request, 'library/friend.html')
 @csrf_exempt
 def autocompleteModel(request):
     if request.is_ajax():
