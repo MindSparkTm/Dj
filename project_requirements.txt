@@ -21,7 +21,7 @@ command-not-found==0.3
 constantly==15.1.0
 contentful==1.11.2
 contentful-management==2.4.0
-cryptography==2.7
+cryptography==3.2
 cupshelpers==1.0
 daphne==2.3.0
 defer==1.0.6
