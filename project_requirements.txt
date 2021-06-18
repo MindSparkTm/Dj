@@ -19,7 +19,7 @@ channels-redis==2.4.0
 chardet==3.0.4
 command-not-found==0.3
 constantly==15.1.0
-contentful==1.11.2
+contentful==1.12.4
 contentful-management==2.4.0
 cryptography==2.7
 cupshelpers==1.0
