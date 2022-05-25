@@ -77,7 +77,7 @@ pycrypto==2.6.1
 pycups==1.9.73
 pygobject==3.26.1
 PyHamcrest==1.9.0
-PyJWT==1.6.1
+PyJWT==2.4.0
 pylint==1.8.2
 pymacaroons==0.13.0
 PyMySQL==0.9.3
